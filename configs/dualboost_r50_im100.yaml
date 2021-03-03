@@ -24,7 +24,7 @@ dataloader:
   train:
     num_workers: 4
     sampler:
-      batch_size: 256
+      batch_size: 128
       shuffle: true
       drop_last: true
     dataset:
@@ -59,7 +59,7 @@ dataloader:
 
 lr_scheduler:
   name: CosineAnnealingDecay
-  learning_rate: 0.8
+  learning_rate: 0.4
   T_max: 200
 
 

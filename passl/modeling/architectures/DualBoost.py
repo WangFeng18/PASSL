@@ -71,6 +71,9 @@ class DualBoost(nn.Layer):
         img_a, img_b = inputs
         a = self.predictors[id_main_tower](self.towers[id_main_tower](img_a))
         b = self.towers[id_target_tower](img_b)
+
+        a = nn.functional.normalize(a, axis=1)
+        b = nn.functional.normalize(b, axis=1)
         outputs = self.head(a, b)
 
         return outputs
