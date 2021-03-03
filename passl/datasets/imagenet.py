@@ -71,7 +71,7 @@ class ImageNet(DatasetFolder):
 
 @DATASETS.register()
 class ImageNet100(ImageNet):
-    cls_filter = lambda a: (a in [
+    cls_filter = lambda self, a: (a in [
             'n02869837', 'n01749939', 'n02488291', 'n02107142', 'n13037406', 'n02091831', 
             'n04517823', 'n04589890', 'n03062245', 'n01773797', 'n01735189', 'n07831146', 'n07753275', 
             'n03085013', 'n04485082', 'n02105505', 'n01983481', 'n02788148', 'n03530642', 'n04435653', 
