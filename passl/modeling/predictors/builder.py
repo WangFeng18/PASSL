@@ -19,5 +19,5 @@ from ...utils.registry import Registry, build_from_config
 PREDICTORS = Registry("PREDICTOR")
 
 
-def build_neck(cfg):
+def build_predictor(cfg):
     return build_from_config(cfg, PREDICTORS)
