@@ -52,7 +52,9 @@ class Predictor(nn.Layer):
         super(Predictor, self).__init__()
 
         self.mlp = nn.Sequential(
-            nn.Linear(in_channels, hid_channels), nn.ReLU(),
+            nn.Linear(in_channels, hid_channels), 
+            nn.BatchNorm1D(hid_channels),
+            nn.ReLU(),
             nn.Linear(hid_channels, out_channels))
 
         self.init_parameters()

@@ -142,14 +142,14 @@ class NonLinearNeckV2(nn.Layer):
                  hid_channels,
                  out_channels,
                  with_avg_pool=True):
-        super(NonLinearNeckV1, self).__init__()
+        super(NonLinearNeckV2, self).__init__()
         self.with_avg_pool = with_avg_pool
         if with_avg_pool:
             self.avgpool = nn.AdaptiveAvgPool2D((1, 1))
 
         self.mlp = nn.Sequential(
             nn.Linear(in_channels, hid_channels), 
-            nn.BatchNorm1d(hid_channels),
+            nn.BatchNorm1D(hid_channels),
             nn.ReLU(),
             nn.Linear(hid_channels, out_channels))
 
