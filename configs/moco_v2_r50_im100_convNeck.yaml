@@ -7,7 +7,7 @@ model:
     name: ResNet
     depth: 50
   neck:
-    name: NonLinearNeckV1
+    name: ConvNonLinearNeck
     in_channels: 2048
     hid_channels: 2048
     out_channels: 128
