@@ -1,26 +1,30 @@
 epochs: 200
-output_dir: output_dir_convNeck
+output_dir: output_dir
 
 model:
-  name: MoCo
+  name: DualBoost
   backbone:
     name: ResNet
     depth: 50
   neck:
-    name: ConvNonLinearNeck
+    name: NonLinearNeckV2
     in_channels: 2048
-    hid_channels: 2048
-    out_channels: 128
+    hid_channels: 4096
+    out_channels: 256
     with_avg_pool: True
+  predictor:
+    name: Predictor
+    in_channels: 256
+    hid_channels: 256
+    out_channels: 256
   head:
-    name: ContrastiveHead
-    temperature: 0.2
+    name: L2Head
 
 dataloader:
   train:
-    num_workers: 8
+    num_workers: 4
     sampler:
-      batch_size: 32
+      batch_size: 256
       shuffle: true
       drop_last: true
     dataset:
@@ -55,13 +59,13 @@ dataloader:
 
 lr_scheduler:
   name: CosineAnnealingDecay
-  learning_rate: 0.03
+  learning_rate: 0.8
   T_max: 200
 
 
 optimizer:
   name: Momentum
-  weight_decay: 0.0001
+  weight_decay: 0.0000015
 
 log_config:
     name: LogHook

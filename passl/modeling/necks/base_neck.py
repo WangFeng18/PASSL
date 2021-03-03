@@ -127,3 +127,39 @@ class ConvNonLinearNeck(nn.Layer):
         if self.with_avg_pool:
             x = self.avgpool(x)
         return self.mlp(x.reshape([x.shape[0], -1]))
+
+
+
+
+
+@NECKS.register()
+class NonLinearNeckV2(nn.Layer):
+    """The non-linear neck in MoCo v2: fc-relu-fc.
+    """
+
+    def __init__(self,
+                 in_channels,
+                 hid_channels,
+                 out_channels,
+                 with_avg_pool=True):
+        super(NonLinearNeckV1, self).__init__()
+        self.with_avg_pool = with_avg_pool
+        if with_avg_pool:
+            self.avgpool = nn.AdaptiveAvgPool2D((1, 1))
+
+        self.mlp = nn.Sequential(
+            nn.Linear(in_channels, hid_channels), 
+            nn.BatchNorm1d(hid_channels),
+            nn.ReLU(),
+            nn.Linear(hid_channels, out_channels))
+
+        self.init_parameters()
+
+    def init_parameters(self, init_linear='normal'):
+        _init_parameters(self, init_linear)
+
+    def forward(self, x):
+
+        if self.with_avg_pool:
+            x = self.avgpool(x)
+        return self.mlp(x.reshape([x.shape[0], -1]))
