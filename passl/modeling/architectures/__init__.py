@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from .moco import MoCo
-from .DualBoost import DualBoost
+from .DualBoost_v2 import DualBoost
 from .clas import Classification
 
 from .builder import build_model

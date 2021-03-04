@@ -23,7 +23,7 @@ from ...utils.logger import get_logger
 
 
 @BACKBONES.register()
-class ResNet(models.ResNet):
+class ResNetCifar(models.ResNet):
     """ResNet model from
     `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_
 
@@ -57,6 +57,15 @@ class ResNet(models.ResNet):
         block = BasicBlock if depth in [18, 34] else BottleneckBlock
 
         super(ResNet, self).__init__(block, depth, num_classes, with_pool)
+        self.conv1 = nn.Conv2d(
+                        3, 
+                        self.inplanes, 
+                        kernel_size=3, 
+                        stride=1, 
+                        padding=1, 
+                        bias_attr=False)
+        self.maxpool = lambda x: x
+        
         self.zero_init_residual = zero_init_residual
         self.frozen_stages = frozen_stages
         self.init_parameters()

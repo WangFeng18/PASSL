@@ -28,7 +28,7 @@ dataloader:
       shuffle: true
       drop_last: true
     dataset:
-      name: ImageNet100
+      name: ImageNet
       dataroot: data/ILSVRC2012/train
       return_label: False
       return_two_sample: True

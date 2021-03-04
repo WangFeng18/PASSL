@@ -22,7 +22,11 @@ from ..necks import build_neck
 from ..heads import build_head
 from ..predictors import build_predictor
 
-
+"""
+COMMENTS:
+    Do not work.
+    The reason maybe caused by the oscillation.
+"""
 @MODELS.register()
 class DualBoost(nn.Layer):
     """
