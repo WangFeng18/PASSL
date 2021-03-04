@@ -21,6 +21,13 @@ from .builder import BACKBONES
 from ...modules import init
 from ...utils.logger import get_logger
 
+class Identity(nn.Layer):
+    def __init__(self):
+        super(Identity, self).__init__()
+    
+    def forward(self, x):
+        return x
+
 
 @BACKBONES.register()
 class ResNetCifar(models.ResNet):
@@ -64,7 +71,7 @@ class ResNetCifar(models.ResNet):
                         stride=1, 
                         padding=1, 
                         bias_attr=False)
-        self.maxpool = lambda x: x
+        self.maxpool = Identity()
 
         self.zero_init_residual = zero_init_residual
         self.frozen_stages = frozen_stages
