@@ -24,7 +24,7 @@ dataloader:
   train:
     num_workers: 4
     sampler:
-      batch_size: 128
+      batch_size: 512
       shuffle: true
       drop_last: true
     dataset:
@@ -60,14 +60,14 @@ dataloader:
 
 lr_scheduler:
   name: CosineAnnealingDecay
-  learning_rate: 0.4
+  learning_rate: 1.6
   T_max: 200
 
 
 optimizer:
   name: Momentum
-  weight_decay: 0.0000015
+  weight_decay: 5e-4
 
 log_config:
     name: LogHook
-    interval: 50
+    interval: 1

@@ -66,12 +66,11 @@ class ResNetCifar(models.ResNet):
         super(ResNetCifar, self).__init__(block, depth, num_classes, with_pool)
         self.conv1 = nn.Conv2D(
                         3,
-                        self.inplanes,
+                        64,
                         kernel_size=3,
                         stride=1,
                         padding=1,
                         bias_attr=False)
-        self.bn1 = self._norm_layer(self.inplanes)
         self.maxpool = Identity()
 
         self.zero_init_residual = zero_init_residual
