@@ -71,6 +71,7 @@ class ResNetCifar(models.ResNet):
                         stride=1,
                         padding=1,
                         bias_attr=False)
+        self.bn1 = self._norm_layer(self.inplanes)
         self.maxpool = Identity()
 
         self.zero_init_residual = zero_init_residual
