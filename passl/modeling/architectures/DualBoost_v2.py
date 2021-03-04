@@ -52,6 +52,7 @@ class DualBoost(nn.Layer):
         self.backbone = self.towers[0][0]
 
         self.head = build_head(head)
+        self.register_buffer("id_main_tower", paddle.zeros([1], 'int64'))
 
     def train_iter(self, *inputs, **kwargs):
         id_main_tower = self.id_main_tower[0]
