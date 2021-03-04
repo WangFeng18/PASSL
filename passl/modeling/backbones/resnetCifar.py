@@ -57,7 +57,7 @@ class ResNetCifar(models.ResNet):
         block = BasicBlock if depth in [18, 34] else BottleneckBlock
 
         super(ResNetCifar, self).__init__(block, depth, num_classes, with_pool)
-        self.conv1 = nn.Conv2d(
+        self.conv1 = nn.Conv2D(
                         3, 
                         self.inplanes, 
                         kernel_size=3, 
