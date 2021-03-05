@@ -47,7 +47,10 @@ class DualBoost(nn.Layer):
         # create the encoders
         # num_classes is the output fc dimension
         self.towers = []
-        self.towers.append(nn.Sequential(build_backbone(backbone), build_neck(neck), build_predictor(predictor)))
+
+        #TODO try to see if the predictor is indispensable in the dualboost imagination
+        # self.towers.append(nn.Sequential(build_backbone(backbone), build_neck(neck), build_predictor(predictor)))
+        self.towers.append(nn.Sequential(build_backbone(backbone), build_neck(neck)))
         self.towers.append(nn.Sequential(build_backbone(backbone), build_neck(neck)))
         self.backbone = self.towers[0][0]
 
