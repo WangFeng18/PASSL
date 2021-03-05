@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import math
 import paddle
 import paddle.nn as nn
 
@@ -47,7 +48,7 @@ class BYOL(nn.Layer):
         # create the encoders
         # num_classes is the output fc dimension
         self.towers = []
-        self.m = 0.996
+        self.base_m = 0.996
 
         #TODO try to see if the predictor is indispensable in the dualboost imagination
         # self.towers.append(nn.Sequential(build_backbone(backbone), build_neck(neck), build_predictor(predictor)))
@@ -75,7 +76,12 @@ class BYOL(nn.Layer):
             param_k.stop_gradient = True
 
     def train_iter(self, *inputs, **kwargs):
-
+        
+        current_iter = kwargs['current_iter']
+        total_iters =  kwargs['total_iters']
+        self.m = 1 - (1-self.base_m) * (1 + math.cos(math.pi*current_iter/total_iters))/2.0
+        print(self.m)
+        
         self._momentum_update_key_encoder()
         img_a, img_b = inputs
         a = self.predictor(self.towers[0](img_a))

@@ -200,7 +200,7 @@ class Trainer:
 
             self.call_hook('train_iter_begin')
 
-            self.outputs = self.model(*data)
+            self.outputs = self.model(*data, total_iters=self.total_iters, current_iter=self.current_iter)
             self.call_hook('train_iter_end')
 
             if self.current_iter % self.iters_per_epoch == 0:
