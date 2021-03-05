@@ -32,15 +32,6 @@ class L2Head(nn.Layer):
         super(L2Head, self).__init__()
 
     def forward(self, x, y):
-        """Forward head.
-
-        Args:
-            pos (Tensor): Nx1 positive similarity.
-            neg (Tensor): Nxk negative similarity.
-
-        Returns:
-            dict[str, Tensor]: A dictionary of loss components.
-        """
         outputs = dict()
         outputs['loss'] = ((x - y)**2).sum(axis=1).mean(axis=0)
         return outputs

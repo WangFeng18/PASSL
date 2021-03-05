@@ -15,5 +15,6 @@
 from .moco import MoCo
 from .DualBoost_v2 import DualBoost
 from .clas import Classification
+from .BYOL import BYOL
 
 from .builder import build_model
