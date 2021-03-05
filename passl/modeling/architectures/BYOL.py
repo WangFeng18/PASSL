@@ -80,8 +80,7 @@ class BYOL(nn.Layer):
         current_iter = kwargs['current_iter']
         total_iters =  kwargs['total_iters']
         self.m = 1 - (1-self.base_m) * (1 + math.cos(math.pi*current_iter/total_iters))/2.0
-        print(self.m)
-        
+
         self._momentum_update_key_encoder()
         img_a, img_b = inputs
         a = self.predictor(self.towers[0](img_a))
