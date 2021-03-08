@@ -31,7 +31,9 @@ class L2Head(nn.Layer):
     def __init__(self):
         super(L2Head, self).__init__()
 
-    def forward(self, x, y):
+    def forward(self, x1, y1, x2, y2):
         outputs = dict()
-        outputs['loss'] = ((x - y)**2).sum(axis=1).mean(axis=0)
+        outputs['loss1'] = ((x1 - y1)**2).sum(axis=1).mean(axis=0)
+        outputs['loss2'] = ((x2 - y2)**2).sum(axis=1).mean(axis=0)
+        outputs['loss'] = outputs['loss1'] + outputs['loss2']
         return outputs

@@ -52,7 +52,7 @@ class BYOL(nn.Layer):
 
         #TODO try to see if the predictor is indispensable in the dualboost imagination
         # self.towers.append(nn.Sequential(build_backbone(backbone), build_neck(neck), build_predictor(predictor)))
-        self.towers.append(nn.Sequential(build_backbone(backbone), build_neck(neck)))
+        self.towers.append(nn.Sequential(build_backbone(backbone), build_neck(neck)))     
         self.towers.append(nn.Sequential(build_backbone(backbone), build_neck(neck)))
 
         self.predictor = build_predictor(predictor)
@@ -63,7 +63,6 @@ class BYOL(nn.Layer):
         
         self.stop_gradient(self.towers[1])
         self.head = build_head(head)
-        self.register_buffer("id_main_tower", paddle.zeros([1], 'int64'))
     
     @paddle.no_grad()
     def _momentum_update_key_encoder(self):
@@ -79,16 +78,26 @@ class BYOL(nn.Layer):
         
         current_iter = kwargs['current_iter']
         total_iters =  kwargs['total_iters']
-        self.m = 1 - (1-self.base_m) * (1 + math.cos(math.pi*current_iter/total_iters))/2.0
+
+        #TODO set it in Im100
+        # self.m = 1 - (1-self.base_m) * (1 + math.cos(math.pi*current_iter/total_iters))/2.0   # 47.0
+        self.m = self.base_m   # 55.7
 
         self._momentum_update_key_encoder()
         img_a, img_b = inputs
-        a = self.predictor(self.towers[0](img_a))
-        b = self.towers[1](img_b)
+        a1 = self.predictor(self.towers[0](img_a))
+        b1 = self.towers[1](img_b)
 
-        a = nn.functional.normalize(a, axis=1)
-        b = nn.functional.normalize(b, axis=1)
-        outputs = self.head(a, b)
+        a1 = nn.functional.normalize(a1, axis=1)
+        b1 = nn.functional.normalize(b1, axis=1)
+
+        a2 = self.predictor(self.towers[0](img_b))
+        b2 = self.towers[1](img_a)
+
+        a2 = nn.functional.normalize(a2, axis=1)
+        b2 = nn.functional.normalize(b2, axis=1)
+
+        outputs = self.head(a1, b1, a2, b2)
 
         return outputs
 

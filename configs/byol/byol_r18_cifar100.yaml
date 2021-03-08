@@ -5,11 +5,11 @@ model:
   name: BYOL
   backbone:
     name: ResNetCifar
-    depth: 50
+    depth: 18
   neck:
     name: NonLinearNeckV2
-    in_channels: 2048
-    hid_channels: 4096
+    in_channels: 512
+    hid_channels: 512
     out_channels: 256
     with_avg_pool: True
   predictor:
@@ -22,9 +22,9 @@ model:
 
 dataloader:
   train:
-    num_workers: 8
+    num_workers: 4
     sampler:
-      batch_size: 512
+      batch_size: 128
       shuffle: true
       drop_last: true
     dataset:
@@ -60,7 +60,7 @@ dataloader:
 
 lr_scheduler:
   name: CosineAnnealingDecay
-  learning_rate: 1.0
+  learning_rate: 0.12
   T_max: 200
 
 

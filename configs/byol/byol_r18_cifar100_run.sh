@@ -1,0 +1,1 @@
+CUDA_VISIBLE_DEVICES=4,5,6,7 python tools/train.py -c configs/byol/byol_r18_cifar100.yaml --num-gpus 4
