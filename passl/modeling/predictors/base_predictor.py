@@ -16,7 +16,7 @@ import paddle
 import paddle.nn as nn
 
 from .builder import PREDICTORS
-from ...modules.init import normal_init, kaiming_init, constant_
+from ...modules.init import normal_init, kaiming_init, constant_, init_backbone_weight
 
 
 def _init_parameters(module, init_linear='normal', std=0.01, bias=0.):
@@ -42,9 +42,6 @@ def _init_parameters(module, init_linear='normal', std=0.01, bias=0.):
 
 @PREDICTORS.register()
 class Predictor(nn.Layer):
-    """The non-linear neck in MoCo v2: fc-relu-fc.
-    """
-
     def __init__(self,
                  in_channels,
                  hid_channels,
@@ -57,7 +54,7 @@ class Predictor(nn.Layer):
             nn.ReLU(),
             nn.Linear(hid_channels, out_channels))
 
-        self.init_parameters()
+        init_backbone_weight(self.mlp)
 
     def init_parameters(self, init_linear='normal'):
         _init_parameters(self, init_linear)

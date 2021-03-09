@@ -35,7 +35,9 @@ class BYOL(nn.Layer):
                  neck=None,
                  head=None,
                  predictor=None,
-                 dim=256):
+                 dim=256,
+                 target_decay_method='fixed',
+                 target_decay_rate=0.996):
         """
         Args:
             backbone (dict): config of backbone.
@@ -48,18 +50,18 @@ class BYOL(nn.Layer):
         # create the encoders
         # num_classes is the output fc dimension
         self.towers = []
-        self.base_m = 0.996
+        self.base_m = target_decay_rate
+        self.target_decay_method = target_decay_method
 
-        #TODO try to see if the predictor is indispensable in the dualboost imagination
-        # self.towers.append(nn.Sequential(build_backbone(backbone), build_neck(neck), build_predictor(predictor)))
         self.towers.append(nn.Sequential(build_backbone(backbone), build_neck(neck)))     
         self.towers.append(nn.Sequential(build_backbone(backbone), build_neck(neck)))
 
         self.predictor = build_predictor(predictor)
         self.backbone = self.towers[0][0]
 
-        for param_q, param_k in zip(self.towers[0].parameters(),self.towers[1].parameters()):
-            param_k.set_value(param_q)  # initialize
+        # TODO IMPORTANT! Exploree if the initialization requires to be synchronized
+        # for param_q, param_k in zip(self.towers[0].parameters(),self.towers[1].parameters()):
+        #     param_k.set_value(param_q)  # initialize
         
         self.stop_gradient(self.towers[1])
         self.head = build_head(head)
@@ -79,9 +81,12 @@ class BYOL(nn.Layer):
         current_iter = kwargs['current_iter']
         total_iters =  kwargs['total_iters']
 
-        #TODO set it in Im100
-        # self.m = 1 - (1-self.base_m) * (1 + math.cos(math.pi*current_iter/total_iters))/2.0   # 47.0
-        self.m = self.base_m   # 55.7
+        if self.target_decay_method == 'cosine':
+            self.m = 1 - (1-self.base_m) * (1 + math.cos(math.pi*current_iter/total_iters))/2.0   # 47.0
+        elif self.target_decay_method == 'fixed':
+            self.m = self.base_m   # 55.7
+        else:
+            raise NotImplementedError
 
         self._momentum_update_key_encoder()
         img_a, img_b = inputs

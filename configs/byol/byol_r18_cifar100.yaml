@@ -19,6 +19,8 @@ model:
     out_channels: 256
   head:
     name: L2Head
+  target_decay_method: fixed # cosine
+  target_decay_rate: 0.996
 
 dataloader:
   train:
@@ -59,9 +61,10 @@ dataloader:
           std: [0.2023, 0.1994, 0.2010]
 
 lr_scheduler:
-  name: CosineAnnealingDecay
+  name: MultiStepDecay
   learning_rate: 0.12
-  T_max: 200
+  milestones: [160, 190]
+  #T_max: 200
 
 
 optimizer:

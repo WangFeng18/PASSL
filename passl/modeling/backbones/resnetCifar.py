@@ -18,7 +18,7 @@ import paddle.vision.models as models
 from paddle.vision.models.resnet import BasicBlock, BottleneckBlock
 
 from .builder import BACKBONES
-from ...modules import init
+from ...modules import init, freeze
 from ...utils.logger import get_logger
 
 class Identity(nn.Layer):
@@ -91,7 +91,7 @@ class ResNetCifar(models.ResNet):
     def init_parameters(self):
         for m in self.sublayers():
             if isinstance(m, nn.Conv2D):
-                init.kaiming_init(m, mode='fan_in', nonlinearity='relu')
+                init.kaiming_init(m, mode='fan_out', nonlinearity='relu')
             elif isinstance(m, (nn.layer.norm._BatchNormBase, nn.GroupNorm)):
                 init.constant_init(m, 1)
 
@@ -104,18 +104,18 @@ class ResNetCifar(models.ResNet):
 
     def _freeze_stages(self):
         if self.frozen_stages >= 0:
-            self.bn1.eval()
+            freeze.freeze_batchnorm_statictis(self.bn1)
             for m in [self.conv1, self.bn1]:
                 for param in m.parameters():
                     param.trainable = False
 
         for i in range(1, self.frozen_stages + 1):
             m = getattr(self, 'layer{}'.format(i))
-            m.eval()
+            freeze.freeze_batchnorm_statictis(m)
             for param in m.parameters():
                 param.trainable = False
-        
+
         if self.frozen_stages >= 0:
             logger = get_logger()
-            logger.info('Frozen layer before stage {}'.format(self.frozen_stages + 1))
-
+            logger.info(
+                'Frozen layer before stage {}'.format(self.frozen_stages + 1))
