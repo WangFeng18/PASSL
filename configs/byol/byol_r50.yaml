@@ -15,7 +15,7 @@ model:
   predictor:
     name: Predictor
     in_channels: 256
-    hid_channels: 256
+    hid_channels: 4096
     out_channels: 256
   head:
     name: L2Head
