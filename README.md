@@ -4,13 +4,6 @@ under develop...
 ## Introduction
 PASSL is a Paddle based vision library for state-of-the-art Self-Supervised Learning research with PaddlePaddle. PASSL aims to accelerate research cycle in self-supervised learning: from designing a new self-supervised task to evaluating the learned representations. 
 
-## Implemented Models 
-Models are all trained with ResNet-50 backbone.
-|  | epochs |official results | passl results | Model |
-| ---|--- | ----  | ---- | ----|
-| MoCo  | 200 |  60.6| 60.64| [download](https://passl.bj.bcebos.com/models/moco_v1_r50_e200_ckpt.pdparams)|
-| MoCo v2 | 200 | 67.7 | 67.72| [download](https://passl.bj.bcebos.com/models/moco_v2_r50_e200_ckpt.pdparams)|
-
 ## Installation
 - Install PaddlePaddle following the [official install guidence](https://www.paddlepaddle.org.cn/install/). 
 
@@ -31,6 +24,14 @@ Models are all trained with ResNet-50 backbone.
             ├── train
             └── val
     ```
+
+## Implemented Models 
+Models are all trained with ResNet-50 backbone.
+|  | epochs |official results | passl results | Model |
+| ---|--- | ----  | ---- | ----|
+| MoCo  | 200 |  60.6| 60.64| [download](https://passl.bj.bcebos.com/models/moco_v1_r50_e200_ckpt.pdparams)|
+| MoCo v2 | 200 | 67.7 | 67.72| [download](https://passl.bj.bcebos.com/models/moco_v2_r50_e200_ckpt.pdparams)|
+
 
 ## Getting Started
 
