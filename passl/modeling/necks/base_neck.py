@@ -116,6 +116,9 @@ class NonLinearNeckV2(nn.Layer):
 
         # init_backbone_weight(self.mlp)
         # self.init_parameters()
+        
+    def init_parameters(self, init_linear='kaiming'):
+        # _init_parameters(self, init_linear)
         for m in self.sublayers():
             if isinstance(m, nn.Linear):
                 xavier_init(m, distribution='uniform')
@@ -126,9 +129,6 @@ class NonLinearNeckV2(nn.Layer):
                     constant_(m.weight, 1)
                 if m.bias is not None:
                     constant_(m.bias, 0)
-
-    def init_parameters(self, init_linear='kaiming'):
-        _init_parameters(self, init_linear)
 
     def forward(self, x):
         if self.with_avg_pool:

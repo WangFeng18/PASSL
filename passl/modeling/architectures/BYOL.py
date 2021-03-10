@@ -53,9 +53,13 @@ class BYOL(nn.Layer):
         self.towers = []
         self.base_m = target_decay_rate
         self.target_decay_method = target_decay_method
-
-        self.towers.append(nn.Sequential(build_backbone(backbone), build_neck(neck)))     
-        self.towers.append(nn.Sequential(build_backbone(backbone), build_neck(neck)))
+        
+        neck1 = build_neck(neck)
+        neck2 = build_neck(neck)
+        neck1.init_parameters()
+        neck2.init_parameters()
+        self.towers.append(nn.Sequential(build_backbone(backbone), neck1))     
+        self.towers.append(nn.Sequential(build_backbone(backbone), neck2))
         self.predictor = build_neck(predictor)
 
         # Convert BatchNorm*d to SyncBatchNorm*d
