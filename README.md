@@ -27,10 +27,10 @@ PASSL is a Paddle based vision library for state-of-the-art Self-Supervised Lear
 
 ## Implemented Models 
 Models are all trained with ResNet-50 backbone.
-|  | epochs |official results | passl results | Model |
-| ---|--- | ----  | ---- | ----|
-| MoCo  | 200 |  60.6| 60.64| [download](https://passl.bj.bcebos.com/models/moco_v1_r50_e200_ckpt.pdparams)|
-| MoCo v2 | 200 | 67.7 | 67.72| [download](https://passl.bj.bcebos.com/models/moco_v2_r50_e200_ckpt.pdparams)|
+|  | epochs |official results | passl results | Backbone| Model |
+| ---|--- | ----  | ---- | ----| ---- |
+| MoCo  | 200 |  60.6| 60.64| ResNet-50 | [download](https://passl.bj.bcebos.com/models/moco_v1_r50_e200_ckpt.pdparams)|
+| MoCo v2 | 200 | 67.7 | 67.72| ResNet-50 | [download](https://passl.bj.bcebos.com/models/moco_v2_r50_e200_ckpt.pdparams)|
 
 
 ## Getting Started
