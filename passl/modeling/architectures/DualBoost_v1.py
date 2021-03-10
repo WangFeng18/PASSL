@@ -20,7 +20,6 @@ from .builder import MODELS
 from ..backbones import build_backbone
 from ..necks import build_neck
 from ..heads import build_head
-from ..predictors import build_predictor
 
 """
 COMMENTS:
@@ -56,8 +55,8 @@ class DualBoost(nn.Layer):
         self.backbone = self.towers[0][0]
 
         self.predictors = []
-        self.predictors.append(build_predictor(predictor))
-        self.predictors.append(build_predictor(predictor))
+        self.predictors.append(build_neck(predictor))
+        self.predictors.append(build_neck(predictor))
 
         self.head = build_head(head)
         self.register_buffer("id_main_tower", paddle.zeros([1], 'int64'))
