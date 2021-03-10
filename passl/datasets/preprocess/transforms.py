@@ -44,7 +44,7 @@ class NormToOne():
             PIL Image: Randomly grayscaled image.
         """
         norm_img = (img/255.).astype('float32')
-        print(type(norm_img))
+        print(norm_img)
         return norm_img
 
 @TRANSFORMS.register()
