@@ -50,7 +50,7 @@ python tools/train.py -c configs/moco_v[1,2]_r50.yaml --num-gpus 8
 
 Pretraining models with 200 epochs can be found at [MoCo v1](https://passl.bj.bcebos.com/models/moco_v1_r50_e200_ckpt.pdparams) and [MoCo v2](https://passl.bj.bcebos.com/models/moco_v2_r50_e200_ckpt.pdparams)
 
-Note: The default learning rate in config files is for 8 GPUs. If using differnt number GPUs, the total batch size will change in proportion, you have to scale the learning rate following new_lr = old_lr * new_ngpus / old_ngpus. Replacing v[1,2] to v1 or v2 according to your requriement.
+Note: The default learning rate in config files is for 8 GPUs. If using differnt number GPUs, the total batch size will change in proportion, you have to scale the learning rate following ```new_lr = old_lr * new_ngpus / old_ngpus```. Replacing v[1,2] to v1 or v2 according to your requriement.
 
 ### 2. Extract backbone weights
 
