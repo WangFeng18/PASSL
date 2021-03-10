@@ -54,6 +54,9 @@ class DualBoost(nn.Layer):
         self.towers.append(nn.Sequential(build_backbone(backbone), build_neck(neck)))
         self.backbone = self.towers[0][0]
 
+        for param_q, param_k in zip(self.towers[0].parameters(),self.towers[1].parameters()):
+            param_k.set_value(param_q)  # initialize
+
         self.head = build_head(head)
         self.register_buffer("id_main_tower", paddle.zeros([1], 'int64'))
 
