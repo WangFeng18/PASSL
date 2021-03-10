@@ -56,7 +56,7 @@ class BYOL(nn.Layer):
         self.towers.append(nn.Sequential(build_backbone(backbone), build_neck(neck)))     
         self.towers.append(nn.Sequential(build_backbone(backbone), build_neck(neck)))
 
-        self.predictor = build_predictor(predictor)
+        self.predictor = build_neck(predictor)
         self.backbone = self.towers[0][0]
 
         # TODO IMPORTANT! Exploree if the initialization requires to be synchronized

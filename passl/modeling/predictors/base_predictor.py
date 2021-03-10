@@ -54,9 +54,10 @@ class Predictor(nn.Layer):
             nn.ReLU(),
             nn.Linear(hid_channels, out_channels))
 
-        # init_backbone_weight(self.mlp)
+        #init_backbone_weight(self.mlp)
+        self.init_parameters()
 
-    def init_parameters(self, init_linear='normal'):
+    def init_parameters(self, init_linear='kaiming'):
         _init_parameters(self, init_linear)
 
     def forward(self, x):

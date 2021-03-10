@@ -49,9 +49,10 @@ class LinearNeck(nn.Layer):
         if with_avg_pool:
             self.avgpool = nn.AdaptiveAvgPool2D((1, 1))
         self.fc = nn.Linear(in_channels, out_channels)
-        init_backbone_weight(self.fc)
+        # init_backbone_weight(self.fc)
+        self.init_parameters()
 
-    def init_parameters(self, init_linear='normal'):
+    def init_parameters(self, init_linear='kaiming'):
         _init_parameters(self, init_linear)
 
     def forward(self, x):
@@ -79,9 +80,10 @@ class NonLinearNeckV1(nn.Layer):
                                            hid_channels), nn.ReLU(),
                                  nn.Linear(hid_channels, out_channels))
 
-        init_backbone_weight(self.mlp)
+        # init_backbone_weight(self.mlp)
+        self.init_parameters()
 
-    def init_parameters(self, init_linear='normal'):
+    def init_parameters(self, init_linear='kaiming'):
         _init_parameters(self, init_linear)
 
     def forward(self, x):
@@ -151,8 +153,9 @@ class NonLinearNeckV2(nn.Layer):
             nn.Linear(hid_channels, out_channels))
 
         # init_backbone_weight(self.mlp)
+        self.init_parameters()
 
-    def init_parameters(self, init_linear='normal'):
+    def init_parameters(self, init_linear='kaiming'):
         _init_parameters(self, init_linear)
 
     def forward(self, x):
