@@ -17,6 +17,7 @@ model:
     in_channels: 256
     hid_channels: 256
     out_channels: 256
+    with_avg_pool: False
   head:
     name: L2Head
   target_decay_method: fixed # cosine
