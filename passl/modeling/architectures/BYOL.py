@@ -60,8 +60,8 @@ class BYOL(nn.Layer):
         self.backbone = self.towers[0][0]
 
         # TODO IMPORTANT! Exploree if the initialization requires to be synchronized
-        # for param_q, param_k in zip(self.towers[0].parameters(),self.towers[1].parameters()):
-        #     param_k.set_value(param_q)  # initialize
+        for param_q, param_k in zip(self.towers[0].parameters(),self.towers[1].parameters()):
+            param_k.set_value(param_q)  # initialize
         
         self.stop_gradient(self.towers[1])
         self.head = build_head(head)

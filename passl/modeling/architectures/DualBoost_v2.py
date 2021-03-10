@@ -68,12 +68,18 @@ class DualBoost(nn.Layer):
         self.stop_gradient(self.towers[id_target_tower])
 
         img_a, img_b = inputs
-        a = self.towers[id_main_tower](img_a)
-        b = self.towers[id_target_tower](img_b)
+        a1 = self.towers[id_main_tower](img_a)
+        b1 = self.towers[id_target_tower](img_b)
 
-        a = nn.functional.normalize(a, axis=1)
-        b = nn.functional.normalize(b, axis=1)
-        outputs = self.head(a, b)
+        a1 = nn.functional.normalize(a1, axis=1)
+        b1 = nn.functional.normalize(b1, axis=1)
+
+        a2 = self.towers[id_main_tower](img_b)
+        b2 = self.towers[id_target_tower](img_a)
+
+        a2 = nn.functional.normalize(a2, axis=1)
+        b2 = nn.functional.normalize(b2, axis=1)
+        outputs = self.head(a1, b1, a2, b2)
 
         return outputs
 

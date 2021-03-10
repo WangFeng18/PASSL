@@ -150,13 +150,12 @@ class NonLinearNeckV2(nn.Layer):
             nn.ReLU(),
             nn.Linear(hid_channels, out_channels))
 
-        init_backbone_weight(self.mlp)
+        # init_backbone_weight(self.mlp)
 
     def init_parameters(self, init_linear='normal'):
         _init_parameters(self, init_linear)
 
     def forward(self, x):
-
         if self.with_avg_pool:
             x = self.avgpool(x)
         return self.mlp(x.reshape([x.shape[0], -1]))

@@ -54,7 +54,7 @@ class Predictor(nn.Layer):
             nn.ReLU(),
             nn.Linear(hid_channels, out_channels))
 
-        init_backbone_weight(self.mlp)
+        # init_backbone_weight(self.mlp)
 
     def init_parameters(self, init_linear='normal'):
         _init_parameters(self, init_linear)
