@@ -30,6 +30,22 @@ TRANSFORMS.register(PT.Resize)
 TRANSFORMS.register(PT.CenterCrop)
 TRANSFORMS.register(PT.ToTensor)
 
+@TRANSFORMS.register()
+class NormToOne():
+    def __init__(self):
+        pass
+
+    def __call__(self, img):
+        """
+        Args:
+            img (PIL Image): Image to be converted to grayscale.
+
+        Returns:
+            PIL Image: Randomly grayscaled image.
+        """
+        print(type(img))
+        print(img.dtype)
+        return img
 
 @TRANSFORMS.register()
 class RandomApply():
