@@ -37,7 +37,9 @@ class BYOL(nn.Layer):
                  predictor=None,
                  dim=256,
                  target_decay_method='fixed',
-                 target_decay_rate=0.996):
+                 target_decay_rate=0.996,
+                 align_init_network=True,
+                 use_synch_bn=True):
         """
         Args:
             backbone (dict): config of backbone.
@@ -55,13 +57,20 @@ class BYOL(nn.Layer):
 
         self.towers.append(nn.Sequential(build_backbone(backbone), build_neck(neck)))     
         self.towers.append(nn.Sequential(build_backbone(backbone), build_neck(neck)))
-
         self.predictor = build_neck(predictor)
+
+        # Convert BatchNorm*d to SyncBatchNorm*d
+        if use_synch_bn:
+            self.towers[0] = nn.SyncBatchNorm.convert_sync_batchnorm(self.towers[0])
+            self.towers[1] = nn.SyncBatchNorm.convert_sync_batchnorm(self.towers[1])
+            self.predictor = nn.SyncBatchNorm.convert_sync_batchnorm(self.predictor)
+
         self.backbone = self.towers[0][0]
 
-        # TODO IMPORTANT! Exploree if the initialization requires to be synchronized
-        for param_q, param_k in zip(self.towers[0].parameters(),self.towers[1].parameters()):
-            param_k.set_value(param_q)  # initialize
+        # TODO IMPORTANT! Explore if the initialization requires to be synchronized
+        if align_init_network:
+            for param_q, param_k in zip(self.towers[0].parameters(),self.towers[1].parameters()):
+                param_k.set_value(param_q)  # initialize
         
         self.stop_gradient(self.towers[1])
         self.head = build_head(head)
