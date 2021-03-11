@@ -12,12 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .builder import build_hook
 from .hook import Hook
-from .lr_scheduler_hook import LRSchedulerHook
-from .optimizer_hook import OptimizerHook
-from .timer_hook import IterTimerHook
-from .log_hook import LogHook
-from .checkpoint_hook import CheckpointHook
-from .evaluate_hook import EvaluateHook
-from .byol_hook import BYOLHook
+from .builder import HOOKS
+
+
+@HOOKS.register()
+class BYOLHook(Hook):
+    def train_iter_end(self, trainer):
+        print('-----------------------------')
+        print('updating target network!')
+        print('-----------------------------')
+        trainer.model.update_target_network()

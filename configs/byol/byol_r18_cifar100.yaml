@@ -80,3 +80,6 @@ optimizer:
 log_config:
     name: LogHook
     interval: 1
+
+custom_config:
+  - name: BYOLHook

@@ -74,12 +74,12 @@ class BYOL(nn.Layer):
         if align_init_network:
             for param_q, param_k in zip(self.towers[0].parameters(),self.towers[1].parameters()):
                 param_k.set_value(param_q)  # initialize
-        
-        self.stop_gradient(self.towers[1])
+                param_k.stop_gradient = True
+                
         self.head = build_head(head)
     
     @paddle.no_grad()
-    def _momentum_update_key_encoder(self):
+    def update_target_network(self):
         """
         Momentum update of the key encoder
         """
@@ -100,31 +100,25 @@ class BYOL(nn.Layer):
         else:
             raise NotImplementedError
 
-        self._momentum_update_key_encoder()
+        # self.update_target_network()
         img_a, img_b = inputs
         a1 = self.predictor(self.towers[0](img_a))
         b1 = self.towers[1](img_b)
 
         a1 = nn.functional.normalize(a1, axis=1)
         b1 = nn.functional.normalize(b1, axis=1)
+        b1.stop_gradient = True
 
         a2 = self.predictor(self.towers[0](img_b))
         b2 = self.towers[1](img_a)
 
         a2 = nn.functional.normalize(a2, axis=1)
         b2 = nn.functional.normalize(b2, axis=1)
+        b2.stop_gradient = True
 
         outputs = self.head(a1, b1, a2, b2)
 
         return outputs
-
-    def stop_gradient(self, network):
-        for param in network.parameters():
-            param.stop_gradient = True
-
-    def recover_gradient(self, network):
-        for param in network.parameters():
-            param.stop_gradient = False
 
     def forward(self, *inputs, mode='train', **kwargs):
         if mode == 'train':
