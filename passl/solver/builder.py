@@ -28,6 +28,7 @@ def build_lr_scheduler(cfg, iters_per_epoch):
         return build_from_config(cfg, LRSCHEDULERS)
     elif cfg.name == 'LinearWarmup':
         cfg.learning_rate = build_lr_scheduler(cfg.learning_rate, iters_per_epoch)
+        print(cfg)
         return build_from_config(cfg, LRSCHEDULERS)
     else:
         raise NotImplementedError
