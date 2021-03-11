@@ -15,7 +15,7 @@
 import math
 import paddle
 
-from paddle.optimizer.lr import MultiStepDecay, CosineAnnealingDecay
+from paddle.optimizer.lr import MultiStepDecay, CosineAnnealingDecay, LinearWarmup
 from .builder import LRSCHEDULERS
 
 LRSCHEDULERS.register(MultiStepDecay)
