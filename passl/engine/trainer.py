@@ -289,7 +289,7 @@ class Trainer:
 
         self.model.set_state_dict(checkpoint['state_dict'])
         self.optimizer.set_state_dict(checkpoint['optimizer'])
-        self.lr_scheduler.set_state_dict(checkpoint['lr_sheduler'])
+        self.lr_scheduler.set_state_dict(checkpoint['lr_sheduer'])
         
         self.logger.info(
             'Resume training from {} success!'.format(checkpoint_path))
