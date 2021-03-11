@@ -11,6 +11,7 @@ model:
     name: ClasHead
     with_avg_pool: true
     in_channels: 512
+    num_classes: 100
 
 dataloader:
   train:
@@ -52,15 +53,14 @@ dataloader:
         - name: CenterCrop
           size: 32
         - name: Transpose
+        - name: NormToOne 
         - name: Normalize
-          # mean: [0.4914, 0.4822, 0.4465]
-          # std: [0.2023, 0.1994, 0.2010]
-          mean: [125.307, 122.961, 113.8575]
-          std: [51.5865, 50.847, 51.255]
+          mean: [0.4914, 0.4822, 0.4465]
+          std: [0.2023, 0.1994, 0.2010]
 
 lr_scheduler:
   name: MultiStepDecay
-  learning_rate: 30.0
+  learning_rate: 3.0
   milestones: [40, 60, 80]
 
 
