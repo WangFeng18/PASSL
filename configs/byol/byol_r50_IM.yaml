@@ -40,7 +40,7 @@ dataloader:
       transforms:
         - name: RandomResizedCrop
           size: 224
-          scale: [0.2, 1.]
+          scale: [0.08, 1.]
         - name: RandomApply
           transforms:
           - name: ColorJitter
