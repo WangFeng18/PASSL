@@ -19,7 +19,7 @@ from .builder import HOOKS
 @HOOKS.register()
 class BYOLHook(Hook):
     def train_iter_end(self, trainer):
-        print('-----------------------------')
-        print('updating target network!')
-        print('-----------------------------')
+        # print('-----------------------------')
+        # print('updating target network!')
+        # print('-----------------------------')
         trainer.model._layers.update_target_network()
