@@ -4,13 +4,13 @@ output_dir: output_dir
 model:
   name: Classification
   backbone:
-    name: ResNetCifar
-    depth: 18
+    name: ResNet
+    depth: 50
     frozen_stages: 4
   head:
     name: ClasHead
     with_avg_pool: true
-    in_channels: 512
+    in_channels: 2048
 
 dataloader:
   train:
@@ -20,20 +20,17 @@ dataloader:
       shuffle: true
       drop_last: False
     dataset:
-      name: CIFAR100
-      mode: 'train'
-      download: True
+      name: ImageNet
+      dataroot: data/ILSVRC2012/train
       return_label: True
-      return_two_sample: False
       transforms:
         - name: RandomResizedCrop
-          size: 32
+          size: 224
         - name: RandomHorizontalFlip
         - name: Transpose
-        - name: NormToOne 
         - name: Normalize
-          mean: [0.4914, 0.4822, 0.4465]
-          std: [0.2023, 0.1994, 0.2010]
+          mean: [123.675, 116.28, 103.53]
+          std: [58.395, 57.12, 57.375]
   val:
     num_workers: 4
     sampler:
@@ -41,27 +38,23 @@ dataloader:
       shuffle: false
       drop_last: false
     dataset:
-      name: CIFAR100
-      mode: 'test'
-      download: True
+      name: ImageNet
+      dataroot: data/ILSVRC2012/val
       return_label: True
-      return_two_sample: False
       transforms:
         - name: Resize
-          size: 32
+          size: 256
         - name: CenterCrop
-          size: 32
+          size: 224
         - name: Transpose
         - name: Normalize
-          # mean: [0.4914, 0.4822, 0.4465]
-          # std: [0.2023, 0.1994, 0.2010]
-          mean: [125.307, 122.961, 113.8575]
-          std: [51.5865, 50.847, 51.255]
+          mean: [123.675, 116.28, 103.53]
+          std: [58.395, 57.12, 57.375]
 
 lr_scheduler:
   name: MultiStepDecay
   learning_rate: 30.0
-  milestones: [40, 60, 80]
+  milestones: [60, 80]
 
 
 optimizer:
