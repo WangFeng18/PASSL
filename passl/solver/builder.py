@@ -22,10 +22,15 @@ def build_lr_scheduler(cfg, iters_per_epoch):
     # FIXME: if have a better way
     if cfg.name == 'CosineAnnealingDecay':
         cfg.T_max *= iters_per_epoch
+        return build_from_config(cfg, LRSCHEDULERS)
     elif cfg.name == 'MultiStepDecay':
         cfg.milestones = [x * iters_per_epoch for x in cfg.milestones]
-
-    return build_from_config(cfg, LRSCHEDULERS)
+        return build_from_config(cfg, LRSCHEDULERS)
+    elif cfg.name == 'LinearWarmup':
+        cfg.learning_rate = build_lr_scheduler(cfg.learning_rate, iters_per_epoch)
+        return build_from_config(cfg, LRSCHEDULERS)
+    else:
+        raise NotImplementedError
 
 
 def build_optimizer(cfg, lr_scheduler, parameters=None):
