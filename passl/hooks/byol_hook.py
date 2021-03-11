@@ -22,4 +22,4 @@ class BYOLHook(Hook):
         print('-----------------------------')
         print('updating target network!')
         print('-----------------------------')
-        trainer.model.update_target_network()
+        trainer.model._layers.update_target_network()
