@@ -20,3 +20,5 @@ from .builder import LRSCHEDULERS
 
 LRSCHEDULERS.register(MultiStepDecay)
 LRSCHEDULERS.register(CosineAnnealingDecay)
+LRSCHEDULERS.register(LinearWarmup)
+
