@@ -83,3 +83,4 @@ log_config:
 
 custom_config:
   - name: BYOLHook
+  - name: VisualHook
