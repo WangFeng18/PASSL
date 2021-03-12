@@ -46,7 +46,7 @@ class VisualHook(Hook):
             for name, param in trainer.model._layers.named_parameters():
                 if 'bn' not in name:
                     print(name)
-                    self.writer.add_histogram(name, param, trainer.current_epoch)
+                    self.writer.add_histogram(name, param.numpy(), trainer.current_epoch)
     
     def run_end(self):
         rank = dist.get_rank()
