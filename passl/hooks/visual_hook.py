@@ -42,10 +42,11 @@ class VisualHook(Hook):
         for k in outputs.keys():
             v = trainer.logs[k].avg
             self.writer.add_scalar(tag='train/{}'.format(k), step=trainer.current_epoch, value=v)
-        # with paddle.no_grad():
-        #     for name, param in trainer.model._layers.named_parameters():
-        #         if 'bn' not in name:
-        #             self.writer.add_histogram(name, param, trainer.current_epoch)
+        with paddle.no_grad():
+            for name, param in trainer.model._layers.named_parameters():
+                if 'bn' not in name:
+                    print(name)
+                    self.writer.add_histogram(name, param, trainer.current_epoch)
     
     def run_end(self):
         rank = dist.get_rank()
