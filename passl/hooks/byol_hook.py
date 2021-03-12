@@ -14,15 +14,18 @@
 
 from .hook import Hook
 from .builder import HOOKS
-
+import paddle.distributed as dist
 
 @HOOKS.register()
 class BYOLHook(Hook):
     def __init__(self, priority=1):
         self.priority = priority
-        
+
     def train_iter_end(self, trainer):
         # print('-----------------------------')
         # print('updating target network!')
         # print('-----------------------------')
-        trainer.model._layers.update_target_network()
+        if dist.get_world_size() > 1:
+            trainer.model._layers.update_target_network()
+        else:
+            trainer.model.update_target_network()
