@@ -32,7 +32,7 @@ class VisualHook(Hook):
         if not os.path.exists(logdir):
             os.makedirs(logdir)
         self.writer = LogWriter(logdir=logdir)
-        # app.run(logdir=logdir, port=8081)
+        app.run(logdir=logdir, port=8040, host="0.0.0.0")
 
     def train_epoch_end(self, trainer):
         rank = dist.get_rank()
@@ -45,7 +45,6 @@ class VisualHook(Hook):
         with paddle.no_grad():
             for name, param in trainer.model._layers.named_parameters():
                 if 'bn' not in name:
-                    print(name)
                     self.writer.add_histogram(name, param.numpy(), trainer.current_epoch)
     
     def run_end(self):

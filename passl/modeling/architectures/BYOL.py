@@ -69,6 +69,7 @@ class BYOL(nn.Layer):
             self.predictor = nn.SyncBatchNorm.convert_sync_batchnorm(self.predictor)
 
         self.backbone = self.towers[0][0]
+        self.neck1 = self.towers[0][1]
 
         # TODO IMPORTANT! Explore if the initialization requires to be synchronized
         if align_init_network:
