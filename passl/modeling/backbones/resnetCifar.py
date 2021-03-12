@@ -59,6 +59,7 @@ class ResNetCifar(models.ResNet):
                  with_pool=False,
                  zero_init_residual=False,
                  frozen_stages=-1,
+                 freeze_bn=True,
                  pretrained=None):
 
         block = BasicBlock if depth in [18, 34] else BottleneckBlock
@@ -76,7 +77,6 @@ class ResNetCifar(models.ResNet):
         self.zero_init_residual = zero_init_residual
         self.frozen_stages = frozen_stages
         self.init_parameters()
-
         if pretrained is not None:
             state_dict = paddle.load(pretrained)
             if 'state_dict' in state_dict:
@@ -86,6 +86,7 @@ class ResNetCifar(models.ResNet):
             logger = get_logger()
             logger.info('Load pretrained backbone weight from {} success!'.format(pretrained))
 
+        self.freeze_bn = freeze_bn
         self._freeze_stages()
 
     def init_parameters(self):
@@ -104,14 +105,16 @@ class ResNetCifar(models.ResNet):
 
     def _freeze_stages(self):
         if self.frozen_stages >= 0:
-            freeze.freeze_batchnorm_statictis(self.bn1)
+            if self.freeze_bn:
+                freeze.freeze_batchnorm_statictis(self.bn1)
             for m in [self.conv1, self.bn1]:
                 for param in m.parameters():
                     param.trainable = False
 
         for i in range(1, self.frozen_stages + 1):
             m = getattr(self, 'layer{}'.format(i))
-            freeze.freeze_batchnorm_statictis(m)
+            if self.freeze_bn:
+                freeze.freeze_batchnorm_statictis(m)
             for param in m.parameters():
                 param.trainable = False
 
