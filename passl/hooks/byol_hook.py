@@ -18,6 +18,9 @@ from .builder import HOOKS
 
 @HOOKS.register()
 class BYOLHook(Hook):
+    def __init__(self, priority=1):
+        self.priority = priority
+        
     def train_iter_end(self, trainer):
         # print('-----------------------------')
         # print('updating target network!')

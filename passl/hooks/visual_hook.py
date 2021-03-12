@@ -20,7 +20,9 @@ import os
 
 @HOOKS.register()
 class VisualHook(Hook):
-
+    def __init__(self, priority=1):
+        self.priority = priority
+        
     def run_begin(self, trainer):
         logdir = os.path.join(trainer.output_dir, 'visual_dl')
         if not os.path.exists(logdir):

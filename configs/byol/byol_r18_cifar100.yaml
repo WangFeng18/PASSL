@@ -80,7 +80,9 @@ optimizer:
 log_config:
     name: LogHook
     interval: 1
+    priority: 2
 
 custom_config:
   - name: BYOLHook
   - name: VisualHook
+    priority: 1

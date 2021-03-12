@@ -76,7 +76,9 @@ class CheckpointHook(Hook):
                  save_optimizer=True,
                  out_dir=None,
                  max_keep_ckpts=-1,
+                 priority=1,
                  **kwargs):
+        self.priority = priority
         self.interval = interval
         self.by_epoch = by_epoch
         self.save_optimizer = save_optimizer

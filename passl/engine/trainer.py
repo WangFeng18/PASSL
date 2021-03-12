@@ -114,8 +114,8 @@ class Trainer:
         self.hooks = []
 
         self.add_train_hooks()
-
         self.add_custom_hooks()
+        self.hooks.sort(key=lambda x: x.priority)
 
         self.epochs = cfg.get('epochs', None)
         if self.epochs:
