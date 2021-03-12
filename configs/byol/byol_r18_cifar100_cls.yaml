@@ -27,8 +27,6 @@ dataloader:
       return_label: True
       return_two_sample: False
       transforms:
-        - name: RandomResizedCrop
-          size: 32
         - name: RandomHorizontalFlip
         - name: Transpose
         - name: NormToOne 
@@ -48,10 +46,6 @@ dataloader:
       return_label: True
       return_two_sample: False
       transforms:
-        - name: Resize
-          size: 32
-        - name: CenterCrop
-          size: 32
         - name: Transpose
         - name: NormToOne 
         - name: Normalize
