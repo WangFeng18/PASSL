@@ -32,7 +32,7 @@ class VisualHook(Hook):
         if not os.path.exists(logdir):
             os.makedirs(logdir)
         self.writer = LogWriter(logdir=logdir)
-        app.run(logdir=logdir, port=8081)
+        # app.run(logdir=logdir, port=8081)
 
     def train_epoch_end(self, trainer):
         rank = dist.get_rank()
