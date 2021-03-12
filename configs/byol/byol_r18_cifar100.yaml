@@ -84,5 +84,5 @@ log_config:
 
 custom_config:
   - name: BYOLHook
-  # - name: VisualHook
-    # priority: 1
+  - name: VisualHook
+    priority: 1
