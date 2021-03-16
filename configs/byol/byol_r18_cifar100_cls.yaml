@@ -6,7 +6,7 @@ model:
   backbone:
     name: ResNetCifar
     depth: 18
-    freeze_bn: False
+    freeze_bn: True
     frozen_stages: 4
   head:
     name: ClasHead
