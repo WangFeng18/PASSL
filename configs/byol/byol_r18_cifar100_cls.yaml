@@ -55,7 +55,7 @@ dataloader:
 
 lr_scheduler:
   name: MultiStepDecay
-  learning_rate: 3.0
+  learning_rate: 30.0
   milestones: [40, 60, 80]
 
 
