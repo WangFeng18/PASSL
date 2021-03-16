@@ -50,7 +50,7 @@ class BYOL(nn.Layer):
 
         # create the encoders
         # num_classes is the output fc dimension
-        self.towers = []
+        self.towers = nn.LayerList()
         self.base_m = target_decay_rate
         self.target_decay_method = target_decay_method
         
@@ -58,7 +58,7 @@ class BYOL(nn.Layer):
         neck2 = build_neck(neck)
         neck1.init_parameters()
         neck2.init_parameters()
-        self.towers.append(nn.Sequential(build_backbone(backbone), neck1))     
+        self.towers.append(nn.Sequential(build_backbone(backbone), neck1))
         self.towers.append(nn.Sequential(build_backbone(backbone), neck2))
         self.predictor = build_neck(predictor)
 
@@ -69,13 +69,15 @@ class BYOL(nn.Layer):
             self.predictor = nn.SyncBatchNorm.convert_sync_batchnorm(self.predictor)
 
         self.backbone = self.towers[0][0]
-        self.neck1 = self.towers[0][1]
+        # self.neck1 = self.towers[0][1]
 
         # TODO IMPORTANT! Explore if the initialization requires to be synchronized
+        for param_q, param_k in zip(self.towers[0].parameters(),self.towers[1].parameters()):
+            param_k.stop_gradient = True
+
         if align_init_network:
             for param_q, param_k in zip(self.towers[0].parameters(),self.towers[1].parameters()):
                 param_k.set_value(param_q)  # initialize
-                param_k.stop_gradient = True
                 
         self.head = build_head(head)
     
