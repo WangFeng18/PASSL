@@ -111,7 +111,7 @@ class SlowFast(nn.Layer):
         else:
             raise Exception("No such mode: {}".format(mode))
 
-    def parameters(self):
+    def separate_parameters(self):
         param_dict = {
             'online_backbone': self.towers[0][0].parameters(),
             'online_neck': self.towers[0][1].parameters(),
