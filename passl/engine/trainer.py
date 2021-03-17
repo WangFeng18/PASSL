@@ -107,7 +107,7 @@ class Trainer:
         self.lr_scheduler = MultiStateDictMeta()
         self.optimizer = MultiStateDictMeta()
         # if type(parameters) == list:
-        if not hasattr(self.model._layer, 'separate_parameters'):
+        if not hasattr(self.model._layers, 'separate_parameters'):
             parameters = self.model.parameters()
             # build lr scheduler
             self.lr_scheduler.append(build_lr_scheduler(cfg.lr_scheduler, self.iters_per_epoch))
