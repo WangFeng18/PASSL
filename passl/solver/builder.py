@@ -13,6 +13,7 @@
 # limitations under the License.
 
 from ..utils.registry import Registry, build_from_config
+import paddle
 
 LRSCHEDULERS = Registry("LRSCHEDULER")
 OPTIMIZERS = Registry("OPTIMIZER")
@@ -51,7 +52,19 @@ class MultiStateDictMeta(object):
         return self.metas[idx]
     
     def state_dict(self):
-        return [mt.state_dict() for mt in self.metas]
+        def convert(state_dict):
+            model_dict = {}
+
+            for k, v in state_dict.items():
+                if isinstance(
+                        v,
+                    (paddle.fluid.framework.Variable, paddle.fluid.core.VarBase)):
+                    model_dict[k] = v.numpy()
+                else:
+                    model_dict[k] = v
+
+            return model_dict
+        return [convert(mt.state_dict()) for mt in self.metas]
     
     def set_state_dict(self, state_dicts):
         for i, state_dict in enumerate(state_dicts):
