@@ -80,7 +80,14 @@ class BYOL(nn.Layer):
                 param_k.set_value(param_q)  # initialize
                 
         self.head = build_head(head)
-    
+
+    @paddle.no_grad()
+    def update_target_network_L1(self):
+        for param_q, param_k in zip(self.towers[0].parameters(),
+                                    self.towers[1].parameters()):
+            paddle.assign(param_k - (1-self.m)*paddle.sign(param_k-param_q), param_k)
+            param_k.stop_gradient = True
+
     @paddle.no_grad()
     def update_target_network(self):
         """
