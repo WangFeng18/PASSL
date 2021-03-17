@@ -20,6 +20,7 @@ from .builder import HOOKS
 class LRSchedulerHook(Hook):
     def __init__(self, priority=1):
         self.priority = priority
-        
+
     def train_iter_end(self, trainer):
-        trainer.lr_scheduler.step()
+        for i in range(len(trainer.lr_scheduler)):
+            trainer.lr_scheduler[i].step()

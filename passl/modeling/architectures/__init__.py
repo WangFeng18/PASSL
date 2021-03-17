@@ -14,6 +14,7 @@
 
 from .moco import MoCo
 from .DualBoost_v2 import DualBoost
+from .SlowFast import SlowFast
 from .clas import Classification
 from .BYOL import BYOL
 

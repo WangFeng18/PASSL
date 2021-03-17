@@ -24,7 +24,7 @@ from ..utils.misc import AverageMeter
 from ..modules import DistributedDataParallel
 from ..datasets.builder import build_dataloader
 from ..modeling.architectures import build_model
-from ..solver import build_lr_scheduler, build_optimizer
+from ..solver import build_lr_scheduler, build_optimizer, MultiStateDictMeta
 
 
 class IterLoader:
@@ -102,13 +102,20 @@ class Trainer:
         self.train_dataloader = build_dataloader(cfg.dataloader.train)
         self.iters_per_epoch = len(self.train_dataloader)
 
-        # build lr scheduler
-        self.lr_scheduler = build_lr_scheduler(cfg.lr_scheduler,
-                                               self.iters_per_epoch)
-
+        
         # build optimizer
-        self.optimizer = build_optimizer(cfg.optimizer, self.lr_scheduler,
-                                         self.model.parameters())
+        parameters = self.model.parameters()
+        self.lr_scheduler = MultiStateDictMeta()
+        self.optimizer = MultiStateDictMeta()
+        if type(parameters) == list:
+            # build lr scheduler
+            self.lr_scheduler.append(build_lr_scheduler(cfg.lr_scheduler, self.iters_per_epoch))
+            self.optimizer.append(build_optimizer(cfg.optimizer, self.lr_scheduler[0], parameters))
+        elif type(parameters) == dict:
+            for key, value in parameters.items():
+                current_lr_scheduler = build_lr_scheduler(getattr(cfg.lr_scheduler, key), self.iters_per_epoch)
+                self.lr_scheduler.append(current_lr_scheduler)
+                self.optimizer.append(build_optimizer(cfg.optimizer, current_lr_scheduler, value))
 
         # build hooks
         self.hooks = []

@@ -31,12 +31,16 @@ Models are all trained with ResNet-50 backbone.
 | ---|--- | ----  | ---- | ----| ---- |
 | MoCo  | 200 |  60.6| 60.64| ResNet-50 | [download](https://passl.bj.bcebos.com/models/moco_v1_r50_e200_ckpt.pdparams)|
 | MoCo v2 | 200 | 67.7 | 67.72| ResNet-50 | [download](https://passl.bj.bcebos.com/models/moco_v2_r50_e200_ckpt.pdparams)|
+
 -----------
+
 BYOL:Cifar100
 |epochs | align_intial | cosine | sync_bn| Acc|
 |---|---|---|---|---|
 |200|No|No|No|62.62|
 |200|No|No|Yes|63.02|
+|200|No|Yes|Yes|61.60|
+|200|Yes|No|Yes|61.84|
 
 ## Getting Started
 

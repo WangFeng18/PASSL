@@ -22,14 +22,17 @@ class OptimizerHook(Hook):
         self.priority = priority
         
     def train_iter_end(self, trainer):
-        trainer.optimizer.clear_grad()
+        for i_opt in range(len(trainer.optimizer)):
+            trainer.optimizer[i_opt].clear_grad()
+
         loss = 0
         for key, value in trainer.outputs.items():
             if 'loss' in key:
                 loss += value
         loss.backward()
-
-        trainer.optimizer.step()
+        
+        for i_opt in range(len(trainer.optimizer)):
+            trainer.optimizer[i_opt].step()
 
         if 'loss' not in trainer.outputs:
             trainer.outputs['loss'] = loss

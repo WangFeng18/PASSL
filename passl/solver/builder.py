@@ -38,3 +38,24 @@ def build_optimizer(cfg, lr_scheduler, parameters=None):
     cfg_ = cfg.copy()
     name = cfg_.pop('name')
     return OPTIMIZERS.get(name)(lr_scheduler, parameters=parameters, **cfg_)
+
+
+class MultiStateDictMeta(object):
+    def __init__(self):
+        self.metas = []
+
+    def append(self, meta):
+        self.metas.append(meta)
+    
+    def __getitem__(self, idx):
+        return self.metas[idx]
+    
+    def state_dict(self):
+        return [mt.state_dict() for mt in self.metas]
+    
+    def set_state_dict(self, state_dicts):
+        for i, state_dict in enumerate(state_dicts):
+            self.metas[i].set_state_dict(state_dict)
+    
+    def __len__(self):
+        return len(self.metas)
