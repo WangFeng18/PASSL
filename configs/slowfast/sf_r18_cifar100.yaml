@@ -89,7 +89,7 @@ lr_scheduler:
     #T_max: 200
   predictor:
     name: MultiStepDecay
-    learning_rate: 1.2
+    learning_rate: 0.12
     milestones: [160, 190]
     #T_max: 200
 
