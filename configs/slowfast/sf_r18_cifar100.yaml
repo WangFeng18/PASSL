@@ -79,12 +79,12 @@ lr_scheduler:
     #T_max: 200
   target_backbone:
     name: MultiStepDecay
-    learning_rate: 0.000012
+    learning_rate: 0.00000012
     milestones: [160, 190]
     #T_max: 200
   target_neck:
     name: MultiStepDecay
-    learning_rate: 0.000012
+    learning_rate: 0.00000012
     milestones: [160, 190]
     #T_max: 200
   predictor:
