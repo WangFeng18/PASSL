@@ -113,7 +113,8 @@ class Trainer:
             self.lr_scheduler.append(build_lr_scheduler(cfg.lr_scheduler, self.iters_per_epoch))
             self.optimizer.append(build_optimizer(cfg.optimizer, self.lr_scheduler[0], parameters))
         else:
-            parameters = self.model._layer.separate_parameters()
+            print('Using Seperating Learning Rate')
+            parameters = self.model._layers.separate_parameters()
             for key, value in parameters.items():
                 current_lr_scheduler = build_lr_scheduler(getattr(cfg.lr_scheduler, key), self.iters_per_epoch)
                 self.lr_scheduler.append(current_lr_scheduler)
