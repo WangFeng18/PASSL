@@ -89,6 +89,14 @@ class BYOL(nn.Layer):
             param_k.stop_gradient = True
 
     @paddle.no_grad()
+    def update_target_network_clip(self):
+        for param_q, param_k in zip(self.towers[0].parameters(),
+                                    self.towers[1].parameters()):
+            paddle.assign((param_k * self.m + param_q * (1. - self.m)), param_k)
+            paddle.assign(param_k - (1-self.m) * paddle.clip((param_k - param_q), min=-1.0, max=1.0) , param_k)
+            param_k.stop_gradient = True
+
+    @paddle.no_grad()
     def update_target_network(self):
         """
         Momentum update of the key encoder
