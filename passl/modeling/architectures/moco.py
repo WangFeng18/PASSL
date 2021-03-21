@@ -205,4 +205,4 @@ def concat_all_gather(tensor):
     paddle.distributed.all_gather(tensors_gather, tensor)
 
     output = paddle.concat(tensors_gather, axis=0)
-    return output
+    return output 

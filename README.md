@@ -42,6 +42,12 @@ BYOL:Cifar100
 |200|No|Yes|Yes|61.60|
 |200|Yes|No|Yes|61.84|
 
+BYOL:Cifar100
+Res50
+|epochs | align_intial | cosine | sync_bn| Acc|
+|---|---|---|---|---|
+|200BYOL|No|No|Yes| 65.76|
+|200BYOLClip|No|No|Yes| 66.81 |
 ## Getting Started
 
 ### 1. Train MoCo[v2]

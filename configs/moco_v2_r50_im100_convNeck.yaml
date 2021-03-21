@@ -1,46 +1,37 @@
 epochs: 200
-output_dir: output_dir
+output_dir: output_dir_convNeck
 
 model:
-  name: BYOL
+  name: MoCo
   backbone:
     name: ResNet
     depth: 50
   neck:
-    name: NonLinearNeckV2
+    name: ConvNonLinearNeck
     in_channels: 2048
-    hid_channels: 4096
-    out_channels: 256
+    hid_channels: 2048
+    out_channels: 128
     with_avg_pool: True
-  predictor:
-    name: NonLinearNeckV2
-    in_channels: 256
-    hid_channels: 4096
-    out_channels: 256
-    with_avg_pool: False
   head:
-    name: L2Head
-  target_decay_method: cosine # cosine
-  target_decay_rate: 0.996
-  align_init_network: True
-  use_synch_bn: True
+    name: ContrastiveHead
+    temperature: 0.2
 
 dataloader:
   train:
-    num_workers: 4
+    num_workers: 8
     sampler:
-      batch_size: 64
+      batch_size: 32
       shuffle: true
-      drop_last: True
+      drop_last: true
     dataset:
-      name: ImageNet
+      name: ImageNet100
       dataroot: data/ILSVRC2012/train
       return_label: False
       return_two_sample: True
       transforms:
         - name: RandomResizedCrop
           size: 224
-          scale: [0.08, 1.]
+          scale: [0.2, 1.]
         - name: RandomApply
           transforms:
           - name: ColorJitter
@@ -63,23 +54,15 @@ dataloader:
           std: [58.395, 57.12, 57.375]
 
 lr_scheduler:
-  name: LinearWarmup
-  learning_rate:
-    name: CosineAnnealingDecay
-    learning_rate: 0.2
-    T_max: 200
-  warmup_steps: 10
-  start_lr: 0.0001
-  end_lr: 0.2
+  name: CosineAnnealingDecay
+  learning_rate: 0.03
+  T_max: 200
 
 
 optimizer:
   name: Momentum
-  weight_decay: 1.5e-6
+  weight_decay: 0.0001
 
 log_config:
     name: LogHook
-    interval: 1
-
-custom_config:
-  - name: BYOLHook
+    interval: 50
