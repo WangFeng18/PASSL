@@ -46,7 +46,7 @@ class BunchTask(object):
         cudaenv = cfg['CUDA_VISIBLE_DEVICES']
         self.pretrain_timestamp = time.strftime('%Y-%m-%d-%H-%M', time.localtime())
         self.pretrain_output_dir = self.parse(cfg['output_dir'])
-        cmd = 'CUDA_VISIBLE_DEVICES={} python3 -c {} --num-gpus {} --output_dir {}' \
+        cmd = 'CUDA_VISIBLE_DEVICES={} python3 tools/train.py -c {} --num-gpus {} --output_dir {}' \
               .format(cudaenv, self.pretrain_config, cfg['num-gpus'], self.pretrain_output_dir)
         print(cmd)
         if not self.test:
@@ -57,7 +57,7 @@ class BunchTask(object):
         self.linear_timestamp = time.strftime('%Y-%m-%d-%H-%M', time.localtime())
         self.linear_pretrain = self.parse(cfg['load'])
         self.linear_output_dir = self.parse(cfg['output_dir'])
-        cmd = 'CUDA_VISIBLE_DEVICES={} python3 -c {} --num-gpus {} --output_dir {} --load {}' \
+        cmd = 'CUDA_VISIBLE_DEVICES={} python3 tools/train.py -c {} --num-gpus {} --output_dir {} --load {}' \
               .format(cudaenv, self.linear_config, cfg['num-gpus'], self.linear_output_dir, self.linear_pretrain)
         print(cmd)
         if not self.test:
@@ -65,7 +65,6 @@ class BunchTask(object):
 
     def parse(self, str):
         res = re.sub(r'{(.*?)}', lambda x: getattr(self, x.group(1)), str)
-        print(res)
         return res
 
 
