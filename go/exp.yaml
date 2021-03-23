@@ -1,0 +1,22 @@
+name: exp_on_cifar100
+group_dir: './output_dir'
+group:
+  - task: byol
+    comments: Ordinary BYOL
+    pretrain_config: "configs/byol/byol_r50_cifar100.yaml"
+    linear_config: "configs/byol/byol_r50_cifar100_cls.yaml"
+    # No need to change
+    bunch_tasks:
+      - name: 'pretrain'
+        output_dir: "{group_dir}/{pretrain_md5}-{pretrain_config_base}/pretrain/{pretrain_timestamp}"
+        num-gpus: 4
+        CUDA_VISIBLE_DEVICES: '0,1,2,3'
+      - name: 'linear'
+        output_dir: "{group_dir}/{pretrain_md5}-{pretrain_config_base}/linear/{linear_md5}-{linear_config_base}/{linear_timestamp}"
+        load: "{pretrain_output_dir}/epoch_200.pdparams"
+        num-gpus: 4
+        CUDA_VISIBLE_DEVICES: '0,1,2,3'
+
+
+
+
