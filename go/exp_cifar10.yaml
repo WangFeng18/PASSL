@@ -18,8 +18,8 @@ group:
         CUDA_VISIBLE_DEVICES: '0,1,2,3'
   - task: byolClip
     comments: Ordinary BYOL
-    pretrain_config: "configs/byolClip/byol_r50_cifar10.yaml"
-    linear_config: "configs/byolClip/byol_r50_cifar10_cls.yaml"
+    pretrain_config: "configs/byolClip/byolClip_r50_cifar10.yaml"
+    linear_config: "configs/byolClip/byolClip_r50_cifar10_cls.yaml"
     # No need to change
     bunch_tasks:
       - name: 'pretrain'
