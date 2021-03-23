@@ -47,7 +47,9 @@ Res50
 |epochs | align_intial | cosine | sync_bn| Acc|
 |---|---|---|---|---|
 |200BYOL|No|No|Yes| 65.76|
+|200BYOL|Yes|No|Yes| 67.01|
 |200BYOLClip|No|No|Yes| 66.81 |
+|200BYOLClip|Yes|No|Yes|  |
 ## Getting Started
 
 ### 1. Train MoCo[v2]

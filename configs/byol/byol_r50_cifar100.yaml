@@ -22,7 +22,7 @@ model:
     name: L2Head
   target_decay_method: fixed # cosine
   target_decay_rate: 0.996
-  align_init_network: False
+  align_init_network: True
   use_synch_bn: True
 
 dataloader:

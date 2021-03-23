@@ -81,31 +81,6 @@ class BYOL(nn.Layer):
                 
         self.head = build_head(head)
 
-    @paddle.no_grad()
-    def update_target_network_L1(self):
-        for param_q, param_k in zip(self.towers[0].parameters(),
-                                    self.towers[1].parameters()):
-            paddle.assign(param_k - (1-self.m)*paddle.sign(param_k-param_q), param_k)
-            param_k.stop_gradient = True
-
-    @paddle.no_grad()
-    def update_target_network_clip(self):
-        for param_q, param_k in zip(self.towers[0].parameters(),
-                                    self.towers[1].parameters()):
-            paddle.assign((param_k * self.m + param_q * (1. - self.m)), param_k)
-            paddle.assign(param_k - (1-self.m) * paddle.clip((param_k - param_q), min=-1.0, max=1.0) , param_k)
-            param_k.stop_gradient = True
-
-    @paddle.no_grad()
-    def update_target_network(self):
-        """
-        Momentum update of the key encoder
-        """
-        for param_q, param_k in zip(self.towers[0].parameters(),
-                                    self.towers[1].parameters()):
-            paddle.assign((param_k * self.m + param_q * (1. - self.m)), param_k)
-            param_k.stop_gradient = True
-
     def train_iter(self, *inputs, **kwargs):
         
         current_iter = kwargs['current_iter']
@@ -147,3 +122,36 @@ class BYOL(nn.Layer):
             return self.backbone(*inputs)
         else:
             raise Exception("No such mode: {}".format(mode))
+
+    # original EMA
+    @paddle.no_grad()
+    def update_target_network(self):
+        for param_q, param_k in zip(self.towers[0].parameters(),
+                                    self.towers[1].parameters()):
+            paddle.assign((param_k * self.m + param_q * (1. - self.m)), param_k)
+            param_k.stop_gradient = True
+
+    # L1 update
+    @paddle.no_grad()
+    def update_target_network_L1(self):
+        for param_q, param_k in zip(self.towers[0].parameters(),
+                                    self.towers[1].parameters()):
+            paddle.assign(param_k - (1-self.m)*paddle.sign(param_k-param_q), param_k)
+            param_k.stop_gradient = True
+
+    # L2 + L1
+    @paddle.no_grad()
+    def update_target_network_clip(self):
+        for param_q, param_k in zip(self.towers[0].parameters(),
+                                    self.towers[1].parameters()):
+            # paddle.assign((param_k * self.m + param_q * (1. - self.m)), param_k)
+            paddle.assign(param_k - (1-self.m) * paddle.clip((param_k - param_q), min=-1.0, max=1.0) , param_k)
+            param_k.stop_gradient = True
+
+    @paddle.no_grad()
+    def update_target_network_LN_clip(self):
+        for param_q, param_k in zip(self.towers[0].parameters(),
+                                    self.towers[1].parameters()):
+            paddle.assign((param_k * self.m + param_q * (1. - self.m)), param_k)
+            paddle.assign(param_k - (1-self.m) * paddle.clip((param_k - param_q), min=-1.0, max=1.0) , param_k)
+            param_k.stop_gradient = True
