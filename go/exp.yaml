@@ -3,8 +3,8 @@ group_dir: './output_dir'
 group:
   - task: byolClip
     comments: Ordinary BYOLClip
-    pretrain_config: "configs/byolClip/byolClip_r50_cifar100.yaml"
-    linear_config: "configs/byolClip/byolClip_r50_cifar100_cls.yaml"
+    pretrain_config: "configs/byolClip/byolClip_r18_cifar100.yaml"
+    linear_config: "configs/byolClip/byolClip_r18_cifar100_cls.yaml"
     # No need to change
     bunch_tasks:
       - name: 'pretrain'
