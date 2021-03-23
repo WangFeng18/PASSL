@@ -32,5 +32,36 @@ group:
         num-gpus: 4
         CUDA_VISIBLE_DEVICES: '0,1,2,3'
 
+  - task: byol
+    comments: BYOL With Cosine Target
+    pretrain_config: "configs/byol/ablation_target_decay/atdbyol_r50_cifar10.yaml"
+    linear_config: "configs/byol/ablation_target_decay/byol_r50_cifar10_cls.yaml"
+    # No need to change
+    bunch_tasks:
+      - name: 'pretrain'
+        output_dir: "{group_dir}/{pretrain_md5}-{pretrain_config_base}/pretrain/{pretrain_timestamp}"
+        num-gpus: 4
+        CUDA_VISIBLE_DEVICES: '0,1,2,3'
+      - name: 'linear'
+        output_dir: "{group_dir}/{pretrain_md5}-{pretrain_config_base}/linear/{linear_md5}-{linear_config_base}/{linear_timestamp}"
+        load: "{pretrain_output_dir}/epoch_200.pdparams"
+        num-gpus: 4
+        CUDA_VISIBLE_DEVICES: '0,1,2,3'
+  - task: byolClip
+    comments: Ordinary BYOL
+    pretrain_config: "configs/byolClip/ablation_target_decay/atdbyolClip_r50_cifar10.yaml"
+    linear_config: "configs/byolClip/ablation_target_decay/byolClip_r50_cifar10_cls.yaml"
+    # No need to change
+    bunch_tasks:
+      - name: 'pretrain'
+        output_dir: "{group_dir}/{pretrain_md5}-{pretrain_config_base}/pretrain/{pretrain_timestamp}"
+        num-gpus: 4
+        CUDA_VISIBLE_DEVICES: '0,1,2,3'
+      - name: 'linear'
+        output_dir: "{group_dir}/{pretrain_md5}-{pretrain_config_base}/linear/{linear_md5}-{linear_config_base}/{linear_timestamp}"
+        load: "{pretrain_output_dir}/epoch_200.pdparams"
+        num-gpus: 4
+        CUDA_VISIBLE_DEVICES: '0,1,2,3'
+
 
 
