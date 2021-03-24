@@ -140,7 +140,8 @@ class ONON(nn.Layer):
         if use_other:
             similarities = paddle.matmul(b1, self.queue)
             indices = paddle.argmax(similarities, axis=1)
-            c = self.queue[indices]
+            c = paddle.gather(self.queue, indices, axis=1)
+            c = paddle.transpose(c, perm=[1,0])
             c.stop_gradient = True
 
         a2 = self.predictor(self.towers[0](img_b))
