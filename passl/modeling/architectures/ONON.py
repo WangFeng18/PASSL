@@ -126,7 +126,7 @@ class ONON(nn.Layer):
         else:
             raise NotImplementedError
 
-        self.pos_prob = (0.8 - 0.0) * self.current_iter/self.total_iters
+        self.pos_prob = (0.8 - 0.0) * current_iter/total_iters
         use_other = self.sample()
 
         # self.update_target_network()
