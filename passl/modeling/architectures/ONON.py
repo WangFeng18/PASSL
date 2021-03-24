@@ -15,6 +15,7 @@
 import math
 import paddle
 import paddle.nn as nn
+import numpy as np
 
 from ...modules.init import init_backbone_weight
 from .builder import MODELS
@@ -38,7 +39,8 @@ class BYOL(nn.Layer):
                  target_decay_method='fixed',
                  target_decay_rate=0.996,
                  align_init_network=True,
-                 use_synch_bn=True):
+                 use_synch_bn=True,
+                 K=32768):
         """
         Args:
             backbone (dict): config of backbone.
@@ -81,6 +83,12 @@ class BYOL(nn.Layer):
                 
         self.head = build_head(head)
 
+        # create the queue
+        self.register_buffer("queue", paddle.randn([dim, K]))
+        self.queue = nn.functional.normalize(self.queue, axis=0)
+
+        self.register_buffer("queue_ptr", paddle.zeros([1], 'int64'))
+
     @paddle.no_grad()
     def _dequeue_and_enqueue(self, keys):
         keys = concat_all_gather(keys)
@@ -118,14 +126,22 @@ class BYOL(nn.Layer):
         else:
             raise NotImplementedError
 
+        self.pos_prob = (0.8 - 0.0) * self.current_iter/self.total_iters
+        use_other = self.sample()
+
         # self.update_target_network()
         img_a, img_b = inputs
         a1 = self.predictor(self.towers[0](img_a))
-        b1 = self.towers[1](img_b)
-
         a1 = nn.functional.normalize(a1, axis=1)
-        b1 = nn.functional.normalize(b1, axis=1)
-        b1.stop_gradient = True
+        if not use_other:
+            b1 = self.towers[1](img_b)
+            b1 = nn.functional.normalize(b1, axis=1)
+            b1.stop_gradient = True
+        else:
+            similarities = paddle.matmul(a1, self.queue)
+            indices = paddle.argmax(similarities, axis=1)
+            b1 = self.queue[indices]
+            b1.stop_gradient = True
 
         a2 = self.predictor(self.towers[0](img_b))
         b2 = self.towers[1](img_a)
@@ -147,3 +163,7 @@ class BYOL(nn.Layer):
             return self.backbone(*inputs)
         else:
             raise Exception("No such mode: {}".format(mode))
+
+    def sample(self):
+        t = np.random.rand()
+        return t < self.pos_prob
