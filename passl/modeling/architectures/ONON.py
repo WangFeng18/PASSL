@@ -50,6 +50,7 @@ class ONON(nn.Layer):
         """
         super(ONON, self).__init__()
 
+        self.K = K
         # create the encoders
         # num_classes is the output fc dimension
         self.towers = nn.LayerList()
