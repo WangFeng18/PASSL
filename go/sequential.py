@@ -65,6 +65,7 @@ class BunchTask(object):
 
     def parse(self, str):
         res = re.sub(r'{(.*?)}', lambda x: getattr(self, x.group(1)), str)
+
         return res
 
 
