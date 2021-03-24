@@ -3,6 +3,7 @@ output_dir: output_dir
 
 model:
   name: ONON
+  K: 32768
   backbone:
     name: ResNetCifar
     depth: 18
