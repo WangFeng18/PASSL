@@ -126,7 +126,7 @@ class CheckpointHook(Hook):
 
         # remove other checkpoints
         if self.max_keep_ckpts > 0:
-            filename_tmpl = self.args.get('filename_tmpl', 'epoch_{}.pth')
+            filename_tmpl = self.args.get('filename_tmpl', 'epoch_{}.pdparams')
             current_epoch = trainer.current_epoch + 1
             for epoch in range(current_epoch - self.max_keep_ckpts, 0, -1):
                 ckpt_path = os.path.join(self.out_dir,
@@ -134,7 +134,7 @@ class CheckpointHook(Hook):
                 if os.path.exists(ckpt_path):
                     os.remove(ckpt_path)
                 else:
-                    break
+                    print(ckpt_path)
 
     def train_iter_end(self, trainer):
         if paddle.distributed.get_rank() != 0:
@@ -153,7 +153,7 @@ class CheckpointHook(Hook):
 
         # remove other checkpoints
         if self.max_keep_ckpts > 0:
-            filename_tmpl = self.args.get('filename_tmpl', 'iter_{}.pth')
+            filename_tmpl = self.args.get('filename_tmpl', 'iter_{}.pdparams')
             current_iter = trainer.iter + 1
             for _iter in range(
                     current_iter - self.max_keep_ckpts * self.interval, 0,

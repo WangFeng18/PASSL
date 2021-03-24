@@ -25,7 +25,7 @@ from ..heads import build_head
 from .moco import concat_all_gather
 
 @MODELS.register()
-class BYOL(nn.Layer):
+class ONON(nn.Layer):
     """
     Build a MoCo model with: a query encoder, a key encoder, and a queue
     https://arxiv.org/abs/1911.05722
@@ -48,7 +48,7 @@ class BYOL(nn.Layer):
             head (dict): config of head.
             dim (int): feature dimension. Default: 256.
         """
-        super(BYOL, self).__init__()
+        super(ONON, self).__init__()
 
         # create the encoders
         # num_classes is the output fc dimension
@@ -133,24 +133,28 @@ class BYOL(nn.Layer):
         img_a, img_b = inputs
         a1 = self.predictor(self.towers[0](img_a))
         a1 = nn.functional.normalize(a1, axis=1)
-        if not use_other:
-            b1 = self.towers[1](img_b)
-            b1 = nn.functional.normalize(b1, axis=1)
-            b1.stop_gradient = True
-        else:
-            similarities = paddle.matmul(a1, self.queue)
+        b1 = self.towers[1](img_b)
+        b1 = nn.functional.normalize(b1, axis=1)
+        b1.stop_gradient = True
+        if use_other:
+            similarities = paddle.matmul(b1, self.queue)
             indices = paddle.argmax(similarities, axis=1)
-            b1 = self.queue[indices]
-            b1.stop_gradient = True
+            c = self.queue[indices]
+            c.stop_gradient = True
 
         a2 = self.predictor(self.towers[0](img_b))
-        b2 = self.towers[1](img_a)
-
         a2 = nn.functional.normalize(a2, axis=1)
-        b2 = nn.functional.normalize(b2, axis=1)
-        b2.stop_gradient = True
+        if not use_other:
+            b2 = self.towers[1](img_a)
+            b2 = nn.functional.normalize(b2, axis=1)
+            b2.stop_gradient = True
 
-        outputs = self.head(a1, b1, a2, b2)
+        if use_other:
+            outputs = self.head(a1, c, a2, c)
+        else:
+            outputs = self.head(a1, b1, a2, b2)
+
+        self._dequeue_and_enqueue(b1)
 
         return outputs
 

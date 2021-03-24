@@ -17,5 +17,6 @@ from .DualBoost_v2 import DualBoost
 from .SlowFast import SlowFast
 from .clas import Classification
 from .BYOL import BYOL
+from .ONON import ONON
 
 from .builder import build_model
