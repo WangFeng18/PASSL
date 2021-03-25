@@ -3,7 +3,7 @@ group_dir: './output_dir'
 group:
   - task: onon
     comments: Ordinary ONON
-    pretrain_config: "configs/onon/ablation_prob/ab1f_onon_r18_cifar100.yaml"
+    pretrain_config: "configs/onon/ablation_prob_r18/ab1f_onon_r18_cifar100.yaml"
     linear_config: "configs/onon/onon_r18_cifar100_cls.yaml"
     # No need to change
     bunch_tasks:
@@ -19,7 +19,7 @@ group:
 
   - task: onon
     comments: Ordinary ONON
-    pretrain_config: "configs/onon/ablation_prob/ab2f_onon_r18_cifar100.yaml"
+    pretrain_config: "configs/onon/ablation_prob_r18/ab2f_onon_r18_cifar100.yaml"
     linear_config: "configs/onon/onon_r18_cifar100_cls.yaml"
     # No need to change
     bunch_tasks:
@@ -35,7 +35,7 @@ group:
 
   - task: onon
     comments: Ordinary ONON
-    pretrain_config: "configs/onon/ablation_prob/ab3f_onon_r18_cifar100.yaml"
+    pretrain_config: "configs/onon/ablation_prob_r18/ab3f_onon_r18_cifar100.yaml"
     linear_config: "configs/onon/onon_r18_cifar100_cls.yaml"
     # No need to change
     bunch_tasks:
@@ -51,7 +51,7 @@ group:
 
   - task: onon
     comments: Ordinary ONON
-    pretrain_config: "configs/onon/ablation_prob/ab4f_onon_r18_cifar100.yaml"
+    pretrain_config: "configs/onon/ablation_prob_r18/ab4f_onon_r18_cifar100.yaml"
     linear_config: "configs/onon/onon_r18_cifar100_cls.yaml"
     # No need to change
     bunch_tasks:
@@ -67,7 +67,7 @@ group:
 
   - task: onon
     comments: Ordinary ONON
-    pretrain_config: "configs/onon/ablation_prob/ab5f_onon_r18_cifar100.yaml"
+    pretrain_config: "configs/onon/ablation_prob_r18/ab5f_onon_r18_cifar100.yaml"
     linear_config: "configs/onon/onon_r18_cifar100_cls.yaml"
     # No need to change
     bunch_tasks:
@@ -83,7 +83,7 @@ group:
 
   - task: onon
     comments: Ordinary ONON
-    pretrain_config: "configs/onon/ablation_prob/ab6f_onon_r18_cifar100.yaml"
+    pretrain_config: "configs/onon/ablation_prob_r18/ab6f_onon_r18_cifar100.yaml"
     linear_config: "configs/onon/onon_r18_cifar100_cls.yaml"
     # No need to change
     bunch_tasks:
@@ -99,7 +99,7 @@ group:
 
   - task: onon
     comments: Ordinary ONON
-    pretrain_config: "configs/onon/ablation_prob/ab7f_onon_r18_cifar100.yaml"
+    pretrain_config: "configs/onon/ablation_prob_r18/ab7f_onon_r18_cifar100.yaml"
     linear_config: "configs/onon/onon_r18_cifar100_cls.yaml"
     # No need to change
     bunch_tasks:
@@ -115,7 +115,7 @@ group:
 
   - task: onon
     comments: Ordinary ONON
-    pretrain_config: "configs/onon/ablation_prob/ab8f_onon_r18_cifar100.yaml"
+    pretrain_config: "configs/onon/ablation_prob_r18/ab8f_onon_r18_cifar100.yaml"
     linear_config: "configs/onon/onon_r18_cifar100_cls.yaml"
     # No need to change
     bunch_tasks:
