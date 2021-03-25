@@ -116,7 +116,7 @@ class ONON(nn.Layer):
             param_k.stop_gradient = True
 
     def train_iter(self, *inputs, **kwargs):
-        
+
         current_iter = kwargs['current_iter']
         total_iters =  kwargs['total_iters']
 
@@ -129,6 +129,8 @@ class ONON(nn.Layer):
 
         self.pos_prob = (0.8 - 0.0) * current_iter/total_iters
         use_other = self.sample()
+        if paddle.distributed.get_world_size() > 1:
+            paddle.distributed.broadcast(use_other, src=0)
 
         # self.update_target_network()
         img_a, img_b = inputs
@@ -138,7 +140,7 @@ class ONON(nn.Layer):
         b1 = nn.functional.normalize(b1, axis=1)
         b1.stop_gradient = True
         
-        if use_other:
+        if bool(use_other):
             with paddle.no_grad():
                 similarities = paddle.matmul(b1, self.queue.clone().detach()).detach()
                 indices = paddle.argmax(similarities, axis=1).detach()
@@ -148,12 +150,12 @@ class ONON(nn.Layer):
 
         a2 = self.predictor(self.towers[0](img_b))
         a2 = nn.functional.normalize(a2, axis=1)
-        if not use_other:
+        if not bool(use_other):
             b2 = self.towers[1](img_a)
             b2 = nn.functional.normalize(b2, axis=1)
             b2.stop_gradient = True
 
-        if use_other:
+        if bool(use_other):
             outputs = self.head(a1, c, a2, c)
         else:
             outputs = self.head(a1, b1, a2, b2)
@@ -175,4 +177,7 @@ class ONON(nn.Layer):
 
     def sample(self):
         t = np.random.rand()
-        return t < self.pos_prob
+        ret_tensor = paddle.to_tensor([0])
+        if t < self.pos_prob:
+            ret_tensor = paddle.to_tensor([1])
+        return ret_tensor
