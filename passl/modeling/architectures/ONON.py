@@ -146,7 +146,7 @@ class ONON(nn.Layer):
             print('ccccccccccccccccccccccccccccc')
             with paddle.no_grad():
                 # similarities = paddle.matmul(b1, self.queue.clone().detach()).detach()
-                similarities = paddle.tensor(np.random.rand(b1.shape[0], 40000))
+                similarities = paddle.tensor(np.random.rand(128, 40000))
                 indices = paddle.argmax(similarities, axis=1).detach()
                 c = paddle.gather(self.queue.clone().detach(), indices, axis=1)
                 c = paddle.transpose(c, perm=[1,0]).detach()
