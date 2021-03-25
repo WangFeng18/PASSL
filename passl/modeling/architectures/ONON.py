@@ -127,7 +127,7 @@ class ONON(nn.Layer):
         else:
             raise NotImplementedError
 
-        self.pos_prob = (0.8 - 0.0) * current_iter/total_iters
+        self.pos_prob = (0.4 - 0.0) * current_iter/total_iters
         use_other = self.sample()
         if paddle.distributed.get_world_size() > 1:
             paddle.distributed.broadcast(use_other, src=0)
