@@ -24,7 +24,7 @@ model:
   target_decay_method: fixed # cosine
   target_decay_rate: 0.996
   align_init_network: False
-  use_synch_bn: True
+  use_synch_bn: False
 
 dataloader:
   train:
