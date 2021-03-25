@@ -25,8 +25,8 @@ model:
   target_decay_rate: 0.996
   align_init_network: False
   use_synch_bn: True
-  max_use_other_prob: 0.4
-  prob_moving_type: 'linear'
+  max_use_other_prob: 0.6
+  prob_moving_type: 'fixed'
 
 
 dataloader:

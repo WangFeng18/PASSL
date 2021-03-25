@@ -39,6 +39,8 @@ class ONON(nn.Layer):
                  target_decay_method='fixed',
                  target_decay_rate=0.996,
                  align_init_network=True,
+                 max_use_other_prob=0.4,
+                 prob_moving_type='fix',
                  use_synch_bn=True,
                  K=32768):
         """
@@ -84,6 +86,9 @@ class ONON(nn.Layer):
                 
         self.head = build_head(head)
 
+        self.max_use_other_prob = max_use_other_prob
+        self.prob_moving_type = prob_moving_type
+
         # create the queue
         self.register_buffer("queue", paddle.randn([dim, K]))
         self.queue = nn.functional.normalize(self.queue, axis=0)
@@ -127,7 +132,13 @@ class ONON(nn.Layer):
         else:
             raise NotImplementedError
 
-        self.pos_prob = (0.4 - 0.0) * current_iter/total_iters
+        if self.prob_moving_type == 'fixed':
+            self.pos_prob = self.max_use_other_prob
+        elif self.prob_moving_type == 'linear':
+            self.pos_prob = self.max_use_other_prob * current_iter/total_iters
+        else:
+            raise NotImplementedError
+
         use_other = self.sample()
         if paddle.distributed.get_world_size() > 1:
             paddle.distributed.broadcast(use_other, src=0)
