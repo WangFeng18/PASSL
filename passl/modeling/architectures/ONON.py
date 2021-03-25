@@ -165,8 +165,9 @@ class ONON(nn.Layer):
             outputs = self.head(a1, c, a2, c)
         else:
             outputs = self.head(a1, b1, a2, b2)
-
-        self._dequeue_and_enqueue(b1)
+            
+        with paddle.no_grad():
+            self._dequeue_and_enqueue(b1)
 
         return outputs
 
