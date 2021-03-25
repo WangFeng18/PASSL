@@ -135,6 +135,7 @@ class CheckpointHook(Hook):
                     os.remove(ckpt_path)
                 else:
                     print(ckpt_path)
+                    break
 
     def train_iter_end(self, trainer):
         if paddle.distributed.get_rank() != 0:
