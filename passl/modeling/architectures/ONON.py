@@ -92,15 +92,19 @@ class ONON(nn.Layer):
 
     @paddle.no_grad()
     def _dequeue_and_enqueue(self, keys):
+        print('enter')
         keys = concat_all_gather(keys)
+        print(keys.shape)
 
         batch_size = keys.shape[0]
 
-        ptr = int(self.queue_ptr)
+        print('before out')
+        ptr = int(self.queue_ptr[0])
         assert self.K % batch_size == 0  # for simplicity
 
         # replace the keys at ptr (dequeue and enqueue)
         self.queue[:, ptr:ptr + batch_size] = keys.transpose([1, 0])
+        print('out')
         ptr = (ptr + batch_size) % self.K  # move pointer
 
         self.queue_ptr[0] = ptr
@@ -137,18 +141,18 @@ class ONON(nn.Layer):
         b1 = self.towers[1](img_b)
         b1 = nn.functional.normalize(b1, axis=1)
         b1.stop_gradient = True
+        
         if use_other:
+            print('ccccccccccccccccccccccccccccc')
             with paddle.no_grad():
-                print('start1')
-                similarities = paddle.matmul(b1, self.queue.clone().detach())
-                print('start2')
-                indices = paddle.argmax(similarities, axis=1)
-                print('start3')
-                c = paddle.gather(self.queue, indices, axis=1)
-                print('start4')
-                c = paddle.transpose(c, perm=[1,0])
-                print('start5')
+                # similarities = paddle.matmul(b1, self.queue.clone().detach()).detach()
+                similarities = paddle.tensor(np.random.rand(b1.shape[0], 40000))
+                indices = paddle.argmax(similarities, axis=1).detach()
+                c = paddle.gather(self.queue.clone().detach(), indices, axis=1)
+                c = paddle.transpose(c, perm=[1,0]).detach()
                 c.stop_gradient = True
+                del similarities
+                del indices
 
         a2 = self.predictor(self.towers[0](img_b))
         a2 = nn.functional.normalize(a2, axis=1)
